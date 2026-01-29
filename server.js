@@ -1,0 +1,65 @@
+const express = require("express");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const connectDB = require("./config/db");
+const enquirRoutes = require("./routes/enquiryRoutes");
+const authRoutes = require("./routes/authRoutes");
+const applicationRoutes = require("./routes/applicationRoutes");
+const schoolRoutes = require("./routes/schoolRoutes.js");
+const staffRoutes = require("./routes/staffRoutes.js");
+const dashboardRoutes = require("./routes/dashbaordRoutes.js");
+const collegeRoutes = require("./routes/collegeRoutes.js");
+const polytechRoutes = require("./routes/polytechRoutes.js");
+
+const fs = require("fs");
+const path = require("path");
+dotenv.config();
+
+const app = express();
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://your-frontend-domain.com",
+  "https://sece-admission-client.vercel.app",
+  "http://10.57.1.69:5173",
+  "http://13.60.186.79",
+  "https://13.60.186.79",
+  "http://13.51.227.15",
+  "https://13.51.227.15",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true,
+  })
+);
+// app.options("*", cors());
+connectDB();
+
+app.use(express.json());
+app.use("/assets", express.static("public/assets"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+app.use("/api/enquiries", enquirRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/application", applicationRoutes);
+app.use("/api/school",schoolRoutes);
+app.use("/api/college",collegeRoutes);
+app.use("/api/polytech",polytechRoutes);
+app.use("/api/staff",staffRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+
+const PORT = process.env.PORT;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
