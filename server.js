@@ -21,6 +21,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://your-frontend-domain.com",
   "https://sece-admission-client.vercel.app",
+  "https://admission-client-test.vercel.app",
   "http://10.57.1.69:5173",
   "http://13.60.186.79",
   "https://13.60.186.79",
